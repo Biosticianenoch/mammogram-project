@@ -1,0 +1,41 @@
+{% extends "mammogram_app/base.html" %}
+{% block content %}
+<div class="card shadow-sm p-4">
+  <h2 class="text-center mb-4">🔍 Prediction Result</h2>
+
+  {% if pdf_ready %}
+    {% if "Malignant" in label %}
+      <div class="alert alert-danger">
+        <strong>⚠ Result:</strong> {{ label }} <br>
+        <strong>Confidence:</strong> {{ confidence }}
+      </div>
+      <p><strong>Recommendations:</strong></p>
+      <ul>
+        <li>Consult an oncologist immediately.</li>
+        <li>Schedule biopsy and diagnostic imaging.</li>
+        <li>Begin treatment planning as advised.</li>
+        <li>Seek emotional and family support.</li>
+      </ul>
+    {% else %}
+      <div class="alert alert-success">
+        <strong>✅ Result:</strong> {{ label }} <br>
+        <strong>Confidence:</strong> {{ confidence }}
+      </div>
+      <p><strong>Recommendations:</strong></p>
+      <ul>
+        <li>Maintain regular screening every 6–12 months.</li>
+        <li>Adopt a healthy lifestyle (diet, exercise, minimal alcohol).</li>
+        <li>Report any unusual changes to your physician.</li>
+      </ul>
+    {% endif %}
+
+    <div class="mt-3 text-center">
+      <a href="/download/" class="btn btn-outline-primary">📄 Download PDF Report</a>
+      <a href="/" class="btn btn-secondary">🔁 New Prediction</a>
+    </div>
+  {% else %}
+    <p>No prediction available. Please upload an image first.</p>
+    <a href="/" class="btn btn-primary">⬅ Go Back</a>
+  {% endif %}
+</div>
+{% endblock %}

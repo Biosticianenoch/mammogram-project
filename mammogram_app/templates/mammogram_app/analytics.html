@@ -1,0 +1,12 @@
+{% extends "mammogram_app/base.html" %}
+{% block content %}
+<h2 class="mb-4">📊 Visitor Analytics Overview</h2>
+
+<div class="card shadow-sm p-4 text-center">
+  <h4>Total Visitors (This Session)</h4>
+  <p class="display-5 fw-bold text-primary">{{ visitors }}</p>
+  <p class="text-muted">
+    This count reflects visitors in the current server session and resets when the server restarts.
+  </p>
+</div>
+{% endblock %}

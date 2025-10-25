@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Django
+db.sqlite3
+/staticfiles/
+media/
+.env
+
+# TensorFlow / Models
+*.h5
+*.keras
+*.ckpt*
+*.pb
+*.tflite
+
+# OS / IDE
+.vscode/
+.idea/
+.DS_Store
+
+# Virtual environments
+venv/
+env/

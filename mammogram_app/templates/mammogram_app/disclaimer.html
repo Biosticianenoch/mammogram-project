@@ -1,0 +1,74 @@
+{% extends "mammogram_app/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container py-5" style="max-width: 800px;">
+    <div class="text-center mb-4">
+        <h2 class="fw-bold text-danger">
+            ⚠️ Medical Disclaimer
+        </h2>
+        <p class="text-secondary">
+            Please read this carefully before interpreting or relying on any prediction results.
+        </p>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body bg-light">
+            <p class="mb-0">
+                This application is intended for 
+                <strong>educational, research, and departmental use</strong> 
+                within medical institutions. It is not designed to replace professional medical evaluation.
+            </p>
+        </div>
+    </div>
+
+    <div class="list-group mb-4">
+        <div class="list-group-item border-0 border-start border-4 border-danger-subtle bg-white shadow-sm mb-3">
+            <h6 class="fw-bold text-danger">🚫 Not a Certified Diagnostic Tool</h6>
+            <p class="mb-0 text-muted">
+                This system is <strong>not approved</strong> by regulatory authorities for clinical diagnosis. 
+                Predictions are for research and educational assistance only.
+            </p>
+        </div>
+
+        <div class="list-group-item border-0 border-start border-4 border-warning bg-white shadow-sm mb-3">
+            <h6 class="fw-bold text-warning">👩‍⚕️ Clinical Judgment Required</h6>
+            <p class="mb-0 text-muted">
+                Always seek the expertise of a licensed radiologist or medical professional 
+                before making any diagnostic or treatment decisions.
+            </p>
+        </div>
+
+        <div class="list-group-item border-0 border-start border-4 border-info bg-white shadow-sm mb-3">
+            <h6 class="fw-bold text-info">🏥 For Departmental Use</h6>
+            <p class="mb-0 text-muted">
+                The application is tailored for internal departmental or institutional use. 
+                Accuracy may vary across different imaging setups or populations.
+            </p>
+        </div>
+
+        <div class="list-group-item border-0 border-start border-4 border-secondary bg-white shadow-sm mb-3">
+            <h6 class="fw-bold text-secondary">⚖️ No Liability for Outcomes</h6>
+            <p class="mb-0 text-muted">
+                The developers and affiliated organizations are not responsible for any 
+                clinical outcomes derived from this system’s output.
+            </p>
+        </div>
+
+        <div class="list-group-item border-0 border-start border-4 border-primary bg-white shadow-sm mb-3">
+            <h6 class="fw-bold text-primary">🔄 Continuous Development</h6>
+            <p class="mb-0 text-muted">
+                The model and interface are under active refinement. 
+                Performance and interpretations may change with future updates.
+            </p>
+        </div>
+    </div>
+
+    <div class="alert alert-secondary text-center shadow-sm">
+        <p class="mb-0">
+            📌 <strong>In any medical emergency, contact a qualified healthcare professional immediately.</strong>
+        </p>
+    </div>
+</div>
+
+{% endblock %}

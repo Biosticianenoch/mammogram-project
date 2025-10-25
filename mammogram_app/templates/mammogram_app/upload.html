@@ -1,0 +1,25 @@
+{% extends 'mammogram_app/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; margin: 2rem auto;">
+    <h2 class="text-center mb-4">🔍 Upload a Mammogram Image</h2>
+
+    <p class="text-center text-muted">
+        Select a grayscale mammogram image (<b>.jpg</b>, <b>.jpeg</b>, or <b>.png</b>) to analyze.
+    </p>
+
+    <form method="POST" enctype="multipart/form-data" action="{% url 'predict' %}" class="mt-4 p-3 border rounded bg-light shadow-sm">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-success btn-lg">🔎 Predict</button>
+        </div>
+    </form>
+
+    <hr>
+    <p class="text-center text-secondary">
+        👥 Total Visitors this Session: <b>{{ visitors }}</b>
+    </p>
+</div>
+{% endblock %}

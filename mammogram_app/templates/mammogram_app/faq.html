@@ -1,0 +1,50 @@
+{% extends "mammogram_app/base.html" %}
+{% block content %}
+<h2 class="mb-4">❓ Frequently Asked Questions</h2>
+
+<div class="accordion" id="faqAccordion">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="q1">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#a1">What is this tool used for?</button>
+    </h2>
+    <div id="a1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+      <div class="accordion-body">
+        This tool uses deep learning to predict breast cancer likelihood from grayscale mammogram images.
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="q2">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a2">Is this a replacement for a doctor?</button>
+    </h2>
+    <div id="a2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+      <div class="accordion-body">
+        No. This tool assists clinicians but cannot replace professional diagnosis or treatment advice.
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="q3">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a3">Are my images stored?</button>
+    </h2>
+    <div id="a3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+      <div class="accordion-body">
+        Uploaded images are processed temporarily for prediction and never stored permanently.
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="q4">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#a4">How accurate is this model?</button>
+    </h2>
+    <div id="a4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+      <div class="accordion-body">
+        The model was trained on verified mammogram datasets, but no AI model achieves 100% accuracy. Always confirm with clinical assessment.
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
