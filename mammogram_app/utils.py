@@ -5,29 +5,40 @@ from PIL import Image
 from fpdf import FPDF
 import datetime
 import tempfile
+import threading
 
 # ✅ Resolve model path relative to the project base directory
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODEL_PATH = os.path.join(BASE_DIR, "mammogram_model.keras")
 
-# ✅ Load model once when the server starts
-try:
-    model = load_model(MODEL_PATH)
-except Exception as e:
-    raise FileNotFoundError(f"❌ Could not load model from {MODEL_PATH}: {e}")
+# ✅ Thread-safe lazy model loading
+_model = None
+_model_lock = threading.Lock()
+
+def get_model():
+    """Load and cache the model lazily to avoid memory overload on startup."""
+    global _model
+    with _model_lock:
+        if _model is None:
+            print("📦 Loading model for the first time...")
+            _model = load_model(MODEL_PATH)
+    return _model
+
 
 # ------------------- Prediction Function -------------------
 def preprocess_and_predict(image_path):
     """Preprocess uploaded mammogram image and predict cancer likelihood."""
-    image = Image.open(image_path).convert("L")       # convert to grayscale
+    image = Image.open(image_path).convert("L")  # convert to grayscale
     image = image.resize((256, 256))
     img_array = np.array(image) / 255.0
     img_array = img_array.reshape(1, 256, 256, 1)
 
+    model = get_model()  # ✅ Load only when needed
     prediction = model.predict(img_array)[0][0]
     label = "Malignant (Cancerous)" if prediction > 0.5 else "Benign (Non-cancerous)"
     confidence = prediction if prediction > 0.5 else 1 - prediction
     return label, f"{confidence:.2%}"
+
 
 # ------------------- PDF Report Generator -------------------
 def generate_pdf(label, confidence):
