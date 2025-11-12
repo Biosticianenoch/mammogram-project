@@ -1,48 +1,46 @@
 import os
 import numpy as np
-from tensorflow.keras.models import load_model
+import threading
 from PIL import Image
 from fpdf import FPDF
 import datetime
 import tempfile
-import threading
+import tflite_runtime.interpreter as tflite
 
-# ✅ Resolve model path relative to the project base directory
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MODEL_PATH = os.path.join(BASE_DIR, "mammogram_model.keras")
+MODEL_PATH = os.path.join(BASE_DIR, "mammogram_model.tflite")
 
-# ✅ Thread-safe lazy model loading
-_model = None
+_interpreter = None
 _model_lock = threading.Lock()
 
-def get_model():
-    """Load and cache the model lazily to avoid memory overload on startup."""
-    global _model
+def get_interpreter():
+    """Load TFLite model lazily to save memory."""
+    global _interpreter
     with _model_lock:
-        if _model is None:
-            print("📦 Loading model for the first time...")
-            _model = load_model(MODEL_PATH)
-    return _model
+        if _interpreter is None:
+            print("📦 Loading TFLite model...")
+            _interpreter = tflite.Interpreter(model_path=MODEL_PATH)
+            _interpreter.allocate_tensors()
+    return _interpreter
 
-
-# ------------------- Prediction Function -------------------
 def preprocess_and_predict(image_path):
-    """Preprocess uploaded mammogram image and predict cancer likelihood."""
-    image = Image.open(image_path).convert("L")  # convert to grayscale
-    image = image.resize((256, 256))
-    img_array = np.array(image) / 255.0
-    img_array = img_array.reshape(1, 256, 256, 1)
+    """Preprocess image and predict using TFLite model."""
+    image = Image.open(image_path).convert("L").resize((256, 256))
+    img_array = np.array(image, dtype=np.float32).reshape(1, 256, 256, 1) / 255.0
 
-    model = get_model()  # ✅ Load only when needed
-    prediction = model.predict(img_array)[0][0]
+    interpreter = get_interpreter()
+    input_details = interpreter.get_input_details()
+    output_details = interpreter.get_output_details()
+
+    interpreter.set_tensor(input_details[0]['index'], img_array)
+    interpreter.invoke()
+    prediction = interpreter.get_tensor(output_details[0]['index'])[0][0]
+
     label = "Malignant (Cancerous)" if prediction > 0.5 else "Benign (Non-cancerous)"
     confidence = prediction if prediction > 0.5 else 1 - prediction
     return label, f"{confidence:.2%}"
 
-
-# ------------------- PDF Report Generator -------------------
 def generate_pdf(label, confidence):
-    """Generate a PDF report with prediction result and confidence."""
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=14)
